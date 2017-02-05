@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -28,8 +29,8 @@ public class ScreenNameDbhImplTest {
     public void setup() throws SQLException, ForgeConfigurationException {
         if (mDbPool == null) {
             ClassLoader classLoader = getClass().getClassLoader();
-
-            DbConfigurationLoader loader = new FileDbConfigurationLoader();
+            File file = new File(classLoader.getResource("db.conf").getFile());
+            DbConfigurationLoader loader = new FileDbConfigurationLoader(file.getParent());
             DbConfiguration dbConf = loader.load();
 
             mDbPool = DbUtils.createC3P0DbPool(dbConf);
