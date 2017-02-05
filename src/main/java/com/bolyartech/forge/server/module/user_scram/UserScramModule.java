@@ -3,9 +3,13 @@ package com.bolyartech.forge.server.module.user_scram;
 import com.bolyartech.forge.server.db.DbPool;
 import com.bolyartech.forge.server.module.HttpModule;
 import com.bolyartech.forge.server.module.user.data.screen_name.ScreenNameDbh;
+import com.bolyartech.forge.server.module.user.data.screen_name.ScreenNameDbhImpl;
 import com.bolyartech.forge.server.module.user.data.user.UserDbh;
+import com.bolyartech.forge.server.module.user.data.user.UserDbhImpl;
 import com.bolyartech.forge.server.module.user_scram.data.scram.ScramDbh;
+import com.bolyartech.forge.server.module.user_scram.data.scram.ScramDbhImpl;
 import com.bolyartech.forge.server.module.user_scram.data.user_scram.UserScramDbh;
+import com.bolyartech.forge.server.module.user_scram.data.user_scram.UserScramDbhImpl;
 import com.bolyartech.forge.server.module.user_scram.endpoints.AutoregistrationEp;
 import com.bolyartech.forge.server.module.user_scram.endpoints.LoginEp;
 import com.bolyartech.forge.server.module.user_scram.endpoints.RegistrationEp;
@@ -30,6 +34,14 @@ public class UserScramModule implements HttpModule {
     private final UserDbh mUserDbh;
     private final ScramDbh mScramDbh;
     private final ScreenNameDbh mScreenNameDbh;
+
+    public static UserScramModule createDefault(DbPool dbPool) {
+        return new UserScramModule(dbPool,
+                new UserScramDbhImpl(),
+                new UserDbhImpl(),
+                new ScramDbhImpl(),
+                new ScreenNameDbhImpl());
+    }
 
 
     public UserScramModule(String pathPrefix, DbPool dbPool, UserScramDbh userScramDbh, UserDbh userDbh, ScramDbh scramDbh,
