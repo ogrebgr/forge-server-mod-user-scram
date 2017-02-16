@@ -8,9 +8,11 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     mavenLocal();
+    jcenter()
 }
 
 dependencies {
+    compile 'com.bolyartech.forge:forge-server:4.0.0+'
     compile project(':forge-server-mod-user')
     compile 'com.bolyartech.scram_sasl:scram_sasl:2.0.0'
     testCompile group: 'org.json', name: 'json', version: '20160810'
