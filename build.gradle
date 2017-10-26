@@ -7,12 +7,12 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    mavenLocal();
+    mavenLocal()
     jcenter()
 }
 
 dependencies {
-    compile 'com.bolyartech.scram_sasl:scram_sasl:2.0.0'
+    compile 'com.bolyartech.scram_sasl:scram_sasl:2.0.1'
     compile project(':forge-server-mod-user')
     testCompile group: 'org.json', name: 'json', version: '20160810'
     testCompile "org.mockito:mockito-core:2.4.0"
