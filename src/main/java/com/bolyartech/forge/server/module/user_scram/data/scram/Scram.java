@@ -6,12 +6,12 @@ import java.util.Objects;
 
 
 public final class Scram {
-    private final long mUser;
-    private final String mUsername;
-    private final String mSalt;
-    private final String mServerKey;
-    private final String mStoredKey;
-    private final int mIterations;
+    private final long user;
+    private final String username;
+    private final String salt;
+    private final String serverKey;
+    private final String storedKey;
+    private final int iterations;
 
 
     public Scram(long user, String username, String salt, String serverKey, String storedKey, int iterations) {
@@ -40,12 +40,12 @@ public final class Scram {
             throw new IllegalArgumentException("Invalid username: " + username);
         }
 
-        mUser = user;
-        mUsername = username;
-        mSalt = salt;
-        mServerKey = serverKey;
-        mStoredKey = storedKey;
-        mIterations = iterations;
+        this.user = user;
+        this.username = username;
+        this.salt = salt;
+        this.serverKey = serverKey;
+        this.storedKey = storedKey;
+        this.iterations = iterations;
     }
 
 
@@ -55,32 +55,32 @@ public final class Scram {
 
 
     public long getUser() {
-        return mUser;
+        return user;
     }
 
 
     public String getUsername() {
-        return mUsername;
+        return username;
     }
 
 
     public String getSalt() {
-        return mSalt;
+        return salt;
     }
 
 
     public String getServerKey() {
-        return mServerKey;
+        return serverKey;
     }
 
 
     public String getStoredKey() {
-        return mStoredKey;
+        return storedKey;
     }
 
 
     public int getIterations() {
-        return mIterations;
+        return iterations;
     }
 
 
@@ -89,9 +89,9 @@ public final class Scram {
         if (obj != null && obj instanceof Scram) {
             Scram other = (Scram) obj;
 
-            return mUser == other.getUser() && mUsername.equals(other.getUsername()) &&
-                    mServerKey.equals(other.getServerKey()) && mStoredKey.equals(other.getStoredKey()) &&
-                    mSalt.equals(other.getSalt()) && mIterations == other.getIterations();
+            return user == other.getUser() && username.equals(other.getUsername()) &&
+                    serverKey.equals(other.getServerKey()) && storedKey.equals(other.getStoredKey()) &&
+                    salt.equals(other.getSalt()) && iterations == other.getIterations();
         } else {
             return false;
         }
@@ -100,7 +100,7 @@ public final class Scram {
 
     @Override
     public int hashCode() {
-        return Objects.hash(mUser, mUsername, mSalt, mServerKey, mStoredKey, mIterations);
+        return Objects.hash(user, username, salt, serverKey, storedKey, iterations);
     }
 
 }

@@ -9,11 +9,11 @@ import java.sql.*;
 public class ScramDbhImpl implements ScramDbh {
     private static final String USERS_TABLE_NAME = "user_scram";
 
-    private final String mTableName;
+    private final String tableName;
 
 
     public ScramDbhImpl() {
-        mTableName = getTableName();
+        tableName = getTableName();
     }
 
 
@@ -24,7 +24,7 @@ public class ScramDbhImpl implements ScramDbh {
         }
 
         String sql = "SELECT username, salt, server_key, stored_key, iterations " +
-                "FROM " + mTableName +
+                "FROM " + tableName +
                 " WHERE user = ?";
         try (PreparedStatement psLoad = dbc.prepareStatement(sql)) {
             psLoad.setLong(1, user);
@@ -54,7 +54,7 @@ public class ScramDbhImpl implements ScramDbh {
         }
 
         String sql = "SELECT user, salt, server_key, stored_key, iterations " +
-                "FROM " + mTableName +
+                "FROM " + tableName +
                 " WHERE username = ?";
         try (PreparedStatement psLoad = dbc.prepareStatement(sql)) {
             psLoad.setString(1, username);
@@ -84,7 +84,7 @@ public class ScramDbhImpl implements ScramDbh {
         }
 
         String sql = "SELECT user " +
-                "FROM " + mTableName +
+                "FROM " + tableName +
                 " WHERE username_lc = ?";
         try (PreparedStatement psLoad = dbc.prepareStatement(sql)) {
             psLoad.setString(1, username.toLowerCase());
@@ -101,7 +101,7 @@ public class ScramDbhImpl implements ScramDbh {
             throws SQLException {
 
         try {
-            String sqlLock = "LOCK TABLES " + mTableName + " WRITE";
+            String sqlLock = "LOCK TABLES " + tableName + " WRITE";
             Statement stLock = dbc.createStatement();
             stLock.execute(sqlLock);
 
@@ -109,7 +109,7 @@ public class ScramDbhImpl implements ScramDbh {
                 Scram ret = new Scram(user, username, passwordData.salt, passwordData.serverKey,
                         passwordData.storedKey, passwordData.iterations);
 
-                String sql = "INSERT INTO " + mTableName + " " +
+                String sql = "INSERT INTO " + tableName + " " +
                         "(user, username, salt, server_key, stored_key, iterations, username_lc) " +
                         "VALUES (?,?,?,?,?,?,?)";
 
@@ -143,7 +143,7 @@ public class ScramDbhImpl implements ScramDbh {
         Scram ret = new Scram(userId, username, passwordData.salt, passwordData.serverKey,
                 passwordData.storedKey, passwordData.iterations);
 
-        String sql = "UPDATE " + mTableName + " SET " +
+        String sql = "UPDATE " + tableName + " SET " +
                 "username = ?, " +
                 "salt = ?," +
                 "server_key = ?," +
@@ -170,7 +170,7 @@ public class ScramDbhImpl implements ScramDbh {
     public boolean changePassword(Connection dbc, long userId, ScramUtils.NewPasswordStringData passwordData)
             throws SQLException {
 
-        String sql = "UPDATE " + mTableName + " SET " +
+        String sql = "UPDATE " + tableName + " SET " +
                 "salt = ?," +
                 "server_key = ?," +
                 "stored_key = ?," +

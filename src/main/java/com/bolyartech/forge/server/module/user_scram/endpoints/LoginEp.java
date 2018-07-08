@@ -36,19 +36,19 @@ public class LoginEp extends ForgeDbSecureEndpoint {
     static final String PARAM_STEP = "step";
     static final String PARAM_DATA = "data";
 
-    private final UserDbh mUserDbh;
-    private final ScramDbh mScramDbh;
-    private final ScreenNameDbh mScreenNameDbh;
+    private final UserDbh userDbh;
+    private final ScramDbh scramDbh;
+    private final ScreenNameDbh screenNameDbh;
 
-    private final Gson mGson;
+    private final Gson gson;
 
 
     public LoginEp(DbPool dbPool, UserDbh userDbh, ScramDbh scramDbh, ScreenNameDbh screenNameDbh) {
         super(dbPool);
-        mUserDbh = userDbh;
-        mScramDbh = scramDbh;
-        mScreenNameDbh = screenNameDbh;
-        mGson = new Gson();
+        this.userDbh = userDbh;
+        this.scramDbh = scramDbh;
+        this.screenNameDbh = screenNameDbh;
+        gson = new Gson();
     }
 
 
@@ -89,10 +89,10 @@ public class LoginEp extends ForgeDbSecureEndpoint {
 
                         SessionInfo si = createSessionInfo(dbc, scramData.getUser());
 
-                        User user = mUserDbh.loadById(dbc, scramData.getUser());
+                        User user = userDbh.loadById(dbc, scramData.getUser());
                         session.setVar(SessionVars.VAR_USER, user);
                         session.setVar(SessionVars.VAR_LOGIN_TYPE, LoginType.NATIVE);
-                        return new OkResponse(mGson.toJson(new RokLogin(session.getMaxInactiveInterval(), si, finalMsg)));
+                        return new OkResponse(gson.toJson(new RokLogin(session.getMaxInactiveInterval(), si, finalMsg)));
                     } else {
                         return new ForgeResponse(UserResponseCodes.Errors.INVALID_LOGIN, "Invalid login");
                     }
@@ -119,7 +119,7 @@ public class LoginEp extends ForgeDbSecureEndpoint {
 
         if (username != null) {
             try {
-                Scram scramData = mScramDbh.loadByUsername(dbc, username);
+                Scram scramData = scramDbh.loadByUsername(dbc, username);
                 if (scramData != null) {
                     session.setVar(SessionVars.VAR_SCRAM_DATA, scramData);
                     UserData ud = new UserData(scramData.getSalt(), scramData.getIterations(),
@@ -141,7 +141,7 @@ public class LoginEp extends ForgeDbSecureEndpoint {
 
 
     private SessionInfo createSessionInfo(Connection dbc, long userId) throws SQLException {
-        ScreenName sn = mScreenNameDbh.loadByUser(dbc, userId);
+        ScreenName sn = screenNameDbh.loadByUser(dbc, userId);
 
         SessionInfo si;
         if (sn != null) {

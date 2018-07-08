@@ -29,12 +29,12 @@ public class RegistrationPostAutoEp extends ForgeUserDbEndpoint {
     static final String PARAM_NEW_PASSWORD = "new_password";
     static final String PARAM_SCREEN_NAME = "screen_name";
 
-    private final Gson mGson;
+    private final Gson gson;
 
-    private final UserDbh mUserDbh;
-    private final ScramDbh mScramDbh;
-    private final UserScramDbh mUserScramDbh;
-    private final ScreenNameDbh mScreenNameDbh;
+    private final UserDbh userDbh;
+    private final ScramDbh scramDbh;
+    private final UserScramDbh userScramDbh;
+    private final ScreenNameDbh screenNameDbh;
 
 
     public RegistrationPostAutoEp(DbPool dbPool,
@@ -44,11 +44,11 @@ public class RegistrationPostAutoEp extends ForgeUserDbEndpoint {
                                   ScreenNameDbh screenNameDbh) {
 
         super(dbPool);
-        mGson = new Gson();
-        mUserDbh = userDbh;
-        mScramDbh = scramDbh;
-        mUserScramDbh = userScramDbh;
-        mScreenNameDbh = screenNameDbh;
+        gson = new Gson();
+        this.userDbh = userDbh;
+        this.scramDbh = scramDbh;
+        this.userScramDbh = userScramDbh;
+        this.screenNameDbh = screenNameDbh;
     }
 
 
@@ -65,7 +65,7 @@ public class RegistrationPostAutoEp extends ForgeUserDbEndpoint {
             return MissingParametersResponse.getInstance();
         }
 
-        ScreenName existingScreenName = mScreenNameDbh.loadByUser(dbc, user.getId());
+        ScreenName existingScreenName = screenNameDbh.loadByUser(dbc, user.getId());
         if (existingScreenName == null) {
             if (Strings.isNullOrEmpty(screenName)) {
                 return new MissingParametersResponse("missing screen name");
@@ -88,10 +88,10 @@ public class RegistrationPostAutoEp extends ForgeUserDbEndpoint {
 
         boolean rez;
         if (existingScreenName == null) {
-            rez = mUserScramDbh.replaceExisting(dbc, mScramDbh, mScreenNameDbh,
+            rez = userScramDbh.replaceExisting(dbc, scramDbh, screenNameDbh,
                     user.getId(), newUsername, data, screenName);
         } else {
-            mUserScramDbh.replaceExistingNamed(dbc, mScramDbh,
+            userScramDbh.replaceExistingNamed(dbc, scramDbh,
                     user.getId(), newUsername, data);
             rez = true;
         }

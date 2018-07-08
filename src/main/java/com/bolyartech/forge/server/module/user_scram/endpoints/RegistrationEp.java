@@ -34,12 +34,12 @@ public class RegistrationEp extends ForgeDbSecureEndpoint {
     static final String PARAM_SCREEN_NAME = "screen_name";
 
 
-    private final Gson mGson;
+    private final Gson gson;
 
-    private final UserDbh mUserDbh;
-    private final ScramDbh mScramDbh;
-    private final UserScramDbh mUserScramDbh;
-    private final ScreenNameDbh mScreenNameDbh;
+    private final UserDbh userDbh;
+    private final ScramDbh scramDbh;
+    private final UserScramDbh userScramDbh;
+    private final ScreenNameDbh screenNameDbh;
 
 
     public RegistrationEp(DbPool dbPool,
@@ -49,11 +49,11 @@ public class RegistrationEp extends ForgeDbSecureEndpoint {
                           ScreenNameDbh screenNameDbh) {
 
         super(dbPool);
-        mGson = new Gson();
-        mUserDbh = userDbh;
-        mScramDbh = scramDbh;
-        mUserScramDbh = userScramDbh;
-        mScreenNameDbh = screenNameDbh;
+        gson = new Gson();
+        this.userDbh = userDbh;
+        this.scramDbh = scramDbh;
+        this.userScramDbh = userScramDbh;
+        this.screenNameDbh = screenNameDbh;
     }
 
 
@@ -86,7 +86,7 @@ public class RegistrationEp extends ForgeDbSecureEndpoint {
         ScramUtils.NewPasswordStringData data = UserScramUtils.createPasswordData(password);
 
 
-        UserScramDbh.NewNamedResult rez = mUserScramDbh.createNewNamed(dbc, mUserDbh, mScramDbh, mScreenNameDbh,
+        UserScramDbh.NewNamedResult rez = userScramDbh.createNewNamed(dbc, userDbh, scramDbh, screenNameDbh,
                 username, data, screenName);
 
         if (rez.isOk) {
@@ -96,7 +96,7 @@ public class RegistrationEp extends ForgeDbSecureEndpoint {
             session.setVar(SessionVars.VAR_USER, rez.mUserScram.getUser());
             session.setVar(SessionVars.VAR_LOGIN_TYPE, LoginType.NATIVE);
             return new OkResponse(
-                    mGson.toJson(new RokLogin(
+                    gson.toJson(new RokLogin(
                             session.getMaxInactiveInterval(),
                             si
                     )));

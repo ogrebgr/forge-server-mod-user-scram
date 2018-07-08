@@ -28,12 +28,12 @@ public class UserScramModule implements HttpModule {
     private static final int MODULE_VERSION_CODE = 1;
     private static final String MODULE_VERSION_NAME = "1.0.0";
 
-    private final String mPathPrefix;
-    private final DbPool mDbPool;
-    private final UserScramDbh mUserScramDbh;
-    private final UserDbh mUserDbh;
-    private final ScramDbh mScramDbh;
-    private final ScreenNameDbh mScreenNameDbh;
+    private final String pathPrefix;
+    private final DbPool dbPool;
+    private final UserScramDbh userScramDbh;
+    private final UserDbh userDbh;
+    private final ScramDbh scramDbh;
+    private final ScreenNameDbh screenNameDbh;
 
     public static UserScramModule createDefault(DbPool dbPool) {
         return new UserScramModule(dbPool,
@@ -47,12 +47,12 @@ public class UserScramModule implements HttpModule {
     public UserScramModule(String pathPrefix, DbPool dbPool, UserScramDbh userScramDbh, UserDbh userDbh, ScramDbh scramDbh,
                            ScreenNameDbh screenNameDbh) {
 
-        mPathPrefix = pathPrefix;
-        mDbPool = dbPool;
-        mUserScramDbh = userScramDbh;
-        mUserDbh = userDbh;
-        mScramDbh = scramDbh;
-        mScreenNameDbh = screenNameDbh;
+        this.pathPrefix = pathPrefix;
+        this.dbPool = dbPool;
+        this.userScramDbh = userScramDbh;
+        this.userDbh = userDbh;
+        this.scramDbh = scramDbh;
+        this.screenNameDbh = screenNameDbh;
     }
 
 
@@ -67,14 +67,14 @@ public class UserScramModule implements HttpModule {
     public List<Route> createRoutes() {
         List<Route> ret = new ArrayList<>();
 
-        ret.add(new PostRoute(mPathPrefix + "autoregister",
-                new AutoregistrationEp(mDbPool, mUserDbh, mScramDbh, mUserScramDbh)));
-        ret.add(new PostRoute(mPathPrefix + "login",
-                new LoginEp(mDbPool, mUserDbh, mScramDbh, mScreenNameDbh)));
-        ret.add(new PostRoute(mPathPrefix + "register",
-                new RegistrationEp(mDbPool, mUserDbh, mScramDbh, mUserScramDbh, mScreenNameDbh)));
-        ret.add(new PostRoute(mPathPrefix + "register_postauto",
-                new RegistrationPostAutoEp(mDbPool, mUserDbh, mScramDbh, mUserScramDbh, mScreenNameDbh)));
+        ret.add(new PostRoute(pathPrefix + "autoregister",
+                new AutoregistrationEp(dbPool, userDbh, scramDbh, userScramDbh)));
+        ret.add(new PostRoute(pathPrefix + "login",
+                new LoginEp(dbPool, userDbh, scramDbh, screenNameDbh)));
+        ret.add(new PostRoute(pathPrefix + "register",
+                new RegistrationEp(dbPool, userDbh, scramDbh, userScramDbh, screenNameDbh)));
+        ret.add(new PostRoute(pathPrefix + "register_postauto",
+                new RegistrationPostAutoEp(dbPool, userDbh, scramDbh, userScramDbh, screenNameDbh)));
 
         return ret;
     }

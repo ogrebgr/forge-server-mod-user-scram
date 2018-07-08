@@ -28,19 +28,19 @@ import java.util.UUID;
 
 
 public class AutoregistrationEp extends ForgeDbEndpoint {
-    private final Gson mGson;
+    private final Gson gson;
 
-    private final UserDbh mUserDbh;
-    private final ScramDbh mScramDbh;
-    private final UserScramDbh mUserScramDbh;
+    private final UserDbh userDbh;
+    private final ScramDbh scramDbh;
+    private final UserScramDbh userScramDbh;
 
 
     public AutoregistrationEp(DbPool dbPool, UserDbh userDbh, ScramDbh scramDbh, UserScramDbh userScramDbh) {
         super(dbPool);
-        mGson = new Gson();
-        mUserDbh = userDbh;
-        mScramDbh = scramDbh;
-        mUserScramDbh = userScramDbh;
+        gson = new Gson();
+        this.userDbh = userDbh;
+        this.scramDbh = scramDbh;
+        this.userScramDbh = userScramDbh;
     }
 
 
@@ -68,7 +68,7 @@ public class AutoregistrationEp extends ForgeDbEndpoint {
                         )
                 );
 
-                us = mUserScramDbh.createNew(dbc, mUserDbh, mScramDbh, username, data);
+                us = userScramDbh.createNew(dbc, userDbh, scramDbh, username, data);
                 if (us != null) {
                     break;
                 }
@@ -83,7 +83,7 @@ public class AutoregistrationEp extends ForgeDbEndpoint {
         session.setVar(SessionVars.VAR_USER, us.getUser());
         session.setVar(SessionVars.VAR_LOGIN_TYPE, LoginType.NATIVE);
         return new OkResponse(
-                mGson.toJson(new RokResponseAutoregistration(username,
+                gson.toJson(new RokResponseAutoregistration(username,
                         password,
                         session.getMaxInactiveInterval(),
                         si
