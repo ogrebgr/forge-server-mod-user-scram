@@ -101,7 +101,7 @@ public class RegistrationEp extends ForgeDbSecureEndpoint {
                             si
                     )));
         } else if (rez.usernameExist) {
-            return new ForgeResponse(UserResponseCodes.Errors.USERNAME_EXISTS, "Invalid Login");
+            return new ForgeResponse(UserResponseCodes.Errors.USERNAME_EXISTS, "username exists");
         } else {
             return new ForgeResponse(UserResponseCodes.Errors.SCREEN_NAME_EXISTS, "screen name taken");
         }
