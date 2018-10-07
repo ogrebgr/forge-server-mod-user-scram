@@ -79,6 +79,12 @@ public class RegistrationPostAutoEp extends ForgeUserDbEndpoint {
             return new ForgeResponse(UserResponseCodes.Errors.INVALID_USERNAME, "Invalid username");
         }
 
+
+        if (scramDbh.usernameExists(dbc, newUsername)) {
+            return new ForgeResponse(UserResponseCodes.Errors.USERNAME_EXISTS, "username exists");
+        }
+
+
         if (!User.isValidPasswordLength(newPassword)) {
             return new ForgeResponse(UserResponseCodes.Errors.INVALID_PASSWORD, "Password too short");
         }
