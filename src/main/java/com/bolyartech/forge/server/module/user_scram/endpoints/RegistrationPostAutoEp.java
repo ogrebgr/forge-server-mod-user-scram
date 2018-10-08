@@ -57,6 +57,11 @@ public class RegistrationPostAutoEp extends ForgeUserDbEndpoint {
                                 Connection dbc,
                                 User user) throws ResponseException, SQLException {
 
+
+        // TODO - this whole idea is flawed. If the user cancel the request midflight server will replace its user data and the user
+        // will be unable to login because he will try with the old credentials which are gone
+
+
         String newUsername = ctx.getFromPost(PARAM_NEW_USERNAME);
         String newPassword = ctx.getFromPost(PARAM_NEW_PASSWORD);
         String screenName = ctx.getFromPost(PARAM_SCREEN_NAME);
